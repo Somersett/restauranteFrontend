@@ -52,8 +52,25 @@ export class AuthService {
     // Ensure the Laravel Sanctum CSRF cookie is set before attempting login.
     // This hits `/sanctum/csrf-cookie` (relative path via ApiService) and waits for it,
     // then performs the login POST. Use withCredentials via the credentials interceptor.
+    //
+    // TEMPORARY WORKAROUND: read the `XSRF-TOKEN` cookie from document.cookie and
+    // inject it manually as `X-XSRF-TOKEN` header for the login request. This helps
+    // diagnose whether Angular's XSRF handling is not adding the header for cross-origin
+    // requests in your environment. Remove this manual header once the backend config
+    // (SANCTUM_STATEFUL_DOMAINS / SESSION settings / CORS) is fixed.
+    const readCookie = (name: string) => {
+      if (typeof document === 'undefined') return null;
+      const m = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()\[\]\\/+^])/g, '\\$1') + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : null;
+    };
+
     return this.api.get<any>('sanctum/csrf-cookie', { withCredentials: true }).pipe(
-      switchMap(() => this.api.post<any>('api/login', credentials, { withCredentials: true })),
+      switchMap(() => {
+        const xsrf = readCookie('XSRF-TOKEN');
+        const headers: any = {};
+        if (xsrf) headers['X-XSRF-TOKEN'] = xsrf;
+        return this.api.post<any>('api/login', credentials, { withCredentials: true, headers });
+      }),
       tap((res: any) => {
         const token = res?.token ?? res?.access_token ?? null;
         if (token) this.setToken(token);
