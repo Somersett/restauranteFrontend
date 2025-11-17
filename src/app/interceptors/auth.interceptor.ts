@@ -7,6 +7,7 @@ import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take, finalize } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { ApiService } from '../services/api.service';
 
 let isRefreshing = false;
 const refreshSubject = new BehaviorSubject<string | null>(null);
@@ -14,6 +15,7 @@ const refreshSubject = new BehaviorSubject<string | null>(null);
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const router = inject(Router);
+  const api = inject(ApiService);
   
   const token = auth.getToken();
   let authReq = req;
@@ -27,6 +29,22 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       const url = (req.url || '').toString();
       if (url.includes('/login') || url.includes('/refresh')) {
         return throwError(() => err);
+      }
+
+      // If Laravel responded with 419 (CSRF token mismatch / page expired),
+      // attempt to fetch a fresh CSRF cookie and retry the original request once.
+      if (err instanceof HttpErrorResponse && err.status === 419) {
+        try {
+          return api.get<any>('sanctum/csrf-cookie', { withCredentials: true }).pipe(
+            switchMap(() => {
+              // retry original request once after obtaining CSRF cookie
+              return next(req.clone());
+            }),
+            catchError((e) => throwError(() => e))
+          );
+        } catch (e) {
+          return throwError(() => err);
+        }
       }
 
       if (err instanceof HttpErrorResponse && err.status === 401) {
