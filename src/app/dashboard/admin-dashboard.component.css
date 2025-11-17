@@ -379,6 +379,191 @@
   transform: none;
 }
 
+/* Employee modal specific layout */
+.modal-card.large {
+  max-width: 980px;
+}
+.employee-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+.card-section {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.03);
+  padding: 1rem;
+  border-radius: 8px;
+}
+.card-section.fullwidth {
+  grid-column: 1 / -1;
+}
+
+/* Custom select with chevron for employee filter */
+.products-actions .custom-select {
+  position: relative;
+  display: inline-block;
+}
+.products-actions .custom-select select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.03);
+  color: #e6eef8;
+  padding: 0.6rem 2.4rem 0.6rem 0.9rem;
+  border-radius: 8px;
+  min-width: 180px;
+  cursor: pointer;
+}
+.products-actions .custom-select select:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.06);
+}
+.products-actions .custom-select .select-chevron {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  pointer-events: none;
+  transition: transform 180ms ease;
+  opacity: 0.95;
+}
+.products-actions .custom-select.open .select-chevron {
+  transform: translateY(-50%) rotate(180deg);
+}
+.card-section h3 {
+  margin-bottom: 0.5rem;
+}
+.subtitle.small {
+  margin-bottom: 0.75rem;
+  color: #94a3b8;
+}
+.employees-table .small {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+/* Header controls for products/employees: align search, select and add button */
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.products-header .products-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.products-header .products-actions .search {
+  width: 320px;
+  padding: 0.6rem 0.9rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.03);
+  color: #d1d5db;
+  border-radius: 8px;
+}
+.products-header .products-actions select {
+  min-width: 160px;
+  padding: 0.56rem 0.9rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.03);
+  color: #d1d5db;
+  border-radius: 8px;
+  appearance: none;
+}
+.products-header .products-actions .add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: #16a34a;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(22,163,74,0.12);
+}
+.products-header .products-actions .add-btn .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+}
+
+/* Modal large tweaks to match screenshots */
+.modal-card.large {
+  padding: 1.25rem 1.5rem;
+}
+
+/* Make selects inside modals look consistent */
+.modal-card select {
+  padding: 0.56rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.03);
+  color: #e5e7eb;
+}
+
+/* Ensure modal inputs have consistent height and padding */
+.modal-card input[type="text"], .modal-card input[type="password"], .modal-card textarea {
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.03);
+  color: #e5e7eb;
+}
+
+/* Image uploader animations */
+.image-drop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+}
+.image-drop .camera-icon {
+  opacity: 0.95;
+  transition: transform 300ms ease, opacity 180ms ease;
+}
+.image-drop.dragover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  background: linear-gradient(180deg, rgba(22,163,74,0.03), rgba(22,163,74,0.01));
+}
+.image-drop.dragover .camera-icon {
+  transform: scale(1.08) rotate(-4deg);
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.45));
+  animation: pulse 1200ms infinite ease-in-out;
+}
+@keyframes pulse {
+  0% { transform: scale(1.0); opacity: 0.95; }
+  50% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1.0); opacity: 0.95; }
+}
+
+.check-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  opacity: 0;
+  transform: scale(0.6) translateY(6px);
+}
+.image-drop.dropped .check-icon {
+  animation: pop 700ms ease forwards;
+}
+@keyframes pop {
+  0% { opacity: 0; transform: scale(0.6) translateY(6px); }
+  50% { opacity: 1; transform: scale(1.12) translateY(-4px); }
+  100% { opacity: 0; transform: scale(1.0) translateY(-8px); }
+}
+
+.image-preview.fade-in { animation: previewIn 360ms ease both; }
+@keyframes previewIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+
 /* Activity List */
 .activity-list {
   display: flex;

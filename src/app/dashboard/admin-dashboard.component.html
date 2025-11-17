@@ -202,12 +202,21 @@
                   <div class="image-uploader modern" [class.dragover]="imageDragOver">
                     <input id="product-image" type="file" (change)="onFileChange($event)" accept="image/*" />
                     <label for="product-image" class="image-drop modern-label"
+                      [class.dragover]="imageDragOver" [class.dropped]="dropSuccess"
                       (dragover)="onImageDragOver($event)" (dragleave)="onImageDragLeave($event)" (drop)="onImageDrop($event)">
-                      <div *ngIf="imagePreview" class="image-preview modern-preview">
+                      <div *ngIf="imagePreview" class="image-preview modern-preview" [class.fade-in]="imagePreview">
                         <img [src]="imagePreview" alt="preview" />
                       </div>
                       <div *ngIf="!imagePreview" class="image-help modern-help">
-                        <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M4 7h3l2-3h6l2 3h3v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7z" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="12" cy="13" r="3" stroke="#fff" stroke-width="1.2" fill="none"/></svg>
+                        <!-- Camera SVG (animated on drag) -->
+                        <svg class="camera-icon" width="56" height="56" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                          <rect x="3" y="6" width="18" height="14" rx="2" stroke="#fff" stroke-width="1.2" fill="none" />
+                          <circle cx="12" cy="13" r="3" stroke="#fff" stroke-width="1.2" fill="none" />
+                          <path d="M8 6l1.5-2h5L16 6" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <svg *ngIf="dropSuccess" class="check-icon" width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                          <path d="M20 6L9 17l-5-5" stroke="#22c55e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
                         <p class="upload-cta">Arrastra o haz click para subir</p>
                         <p class="upload-sub">PNG, JPG hasta 10MB</p>
                       </div>
@@ -227,8 +236,109 @@
         </div>
       </section>
 
-      <!-- Non-product dashboard content -->
-      <section *ngIf="activeSection !== 'productos'">
+      <!-- Employees view -->
+      <section *ngIf="activeSection === 'empleados'" class="employees-view">
+        <div class="products-header">
+          <div>
+            <h1>Gestión de Empleados</h1>
+            <p class="subtitle">Añade, edita y gestiona los empleados del restaurante.</p>
+          </div>
+          <div class="products-actions">
+            <input class="search" placeholder="Buscar empleado..." [(ngModel)]="searchEmployee" />
+            <div class="custom-select" [class.open]="roleDropdownOpen">
+              <select [(ngModel)]="selectedRole" (click)="toggleRoleDropdown()" (blur)="closeRoleDropdown()" (change)="closeRoleDropdown()">
+                <option>Todos</option>
+                <option>Mesero</option>
+                <option>Cocinero</option>
+                <option>Cajero</option>
+                <option>Administrador</option>
+              </select>
+              <svg class="select-chevron" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 10l5 5 5-5" fill="none" stroke="#cfe3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <button class="add-btn" (click)="openAddEmployee()">
+              <span class="icon">+</span>
+              <span>Añadir Empleado</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="products-table employees-table">
+          <div class="table-head">
+            <div>Nombre Completo</div>
+            <div>Rol</div>
+            <div>Contacto</div>
+            <div>Estado</div>
+            <div>Fecha de Ingreso</div>
+            <div>Acciones</div>
+          </div>
+          <div class="table-body">
+            <div class="table-row" *ngFor="let e of employees | slice:0:100">
+              <div class="product-cell">{{ e.fullName || e.name }}</div>
+              <div class="product-cell">{{ e.role }}</div>
+              <div class="product-cell">{{ e.email }}<div class="small">{{ e.phone }}</div></div>
+              <div class="product-cell"><span class="badge" [class.active]="e.estado === 'Activo'">{{ e.estado }}</span></div>
+              <div class="product-cell">{{ e.fechaIngreso || e.created_at || '-' }}</div>
+              <div class="product-cell">
+                <button class="icon-btn">✏️</button>
+                <button class="icon-btn">🗑️</button>
+              </div>
+            </div>
+          </div>
+          <div class="table-footer">Mostrando 1-{{employees.length}} de {{employees.length}} resultados</div>
+        </div>
+
+        <!-- Add Employee Modal -->
+        <div class="modal-overlay" *ngIf="showAddEmployee">
+          <div class="modal-card large">
+            <h2>Añadir Nuevo Empleado</h2>
+            <p class="subtitle">Completa los datos para registrar un nuevo empleado en el sistema.</p>
+            <form (ngSubmit)="addEmployee()" [formGroup]="employeeForm">
+              <div class="employee-form-grid">
+                <div class="card-section">
+                  <h3>Información del Empleado</h3>
+                  <p class="subtitle small">Introduce los detalles básicos del nuevo empleado.</p>
+                  <label>Nombre Completo</label>
+                  <input formControlName="fullName" placeholder="Ej: Ana García" [class.input-invalid]="employeeForm.get('fullName')?.invalid && (employeeForm.get('fullName')?.touched || employeeForm.get('fullName')?.dirty)" />
+                  <label>Rol</label>
+                  <select formControlName="role" [class.input-invalid]="employeeForm.get('role')?.invalid && (employeeForm.get('role')?.touched || employeeForm.get('role')?.dirty)">
+                    <option value="">Seleccionar rol</option>
+                    <option>Mesero</option>
+                    <option>Cocinero</option>
+                    <option>Cajero</option>
+                    <option>Administrador</option>
+                  </select>
+                </div>
+
+                <div class="card-section">
+                  <h3>Información de Contacto</h3>
+                  <p class="subtitle small">Datos para contactar al empleado y para el acceso al sistema.</p>
+                  <label>Email</label>
+                  <input formControlName="email" placeholder="ejemplo@cypra.com" [class.input-invalid]="employeeForm.get('email')?.invalid && (employeeForm.get('email')?.touched || employeeForm.get('email')?.dirty)" />
+                  <label>Teléfono</label>
+                  <input formControlName="phone" placeholder="+1 (555) 123-4567" />
+                </div>
+
+                <div class="card-section fullwidth">
+                  <h3>Credenciales de Acceso</h3>
+                  <p class="subtitle small">Establece una contraseña inicial para la cuenta del empleado.</p>
+                  <label>Contraseña Inicial</label>
+                  <input type="password" formControlName="password" placeholder="*******" [class.input-invalid]="employeeForm.get('password')?.invalid && (employeeForm.get('password')?.touched || employeeForm.get('password')?.dirty)" />
+                </div>
+              </div>
+
+              <div class="modal-actions">
+                <button type="button" class="btn muted" (click)="closeAddEmployee()">Cancelar</button>
+                <button type="submit" class="btn primary" [disabled]="employeeForm.invalid || saving">Guardar Empleado</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Non-product dashboard content (only show on inicio) -->
+      <section *ngIf="activeSection === 'inicio'">
         <p class="subtitle">Aquí tienes un resumen de la actividad de hoy.</p>
 
         <!-- Stats Cards -->

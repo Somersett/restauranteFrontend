@@ -24,11 +24,27 @@ export class AdminDashboardComponent {
 
   // Products state
   products: Array<any> = [];
+  // Employees state
+  employees: Array<any> = [];
 
   // UI controls
   searchQuery = '';
   selectedCategory = 'Todas las Categorías';
   showAddProduct = false;
+  // Employees UI
+  searchEmployee = '';
+  selectedRole = 'Todos';
+  // track open state for custom select chevron
+  roleDropdownOpen = false;
+  showAddEmployee = false;
+
+  employeeForm = this.fb.group({
+    fullName: ['', Validators.required],
+    role: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    phone: [''],
+    password: ['', Validators.required]
+  });
 
   productForm = this.fb.group({
     name: ['', Validators.required],
@@ -48,6 +64,7 @@ export class AdminDashboardComponent {
 
   imagePreview: string | null = null;
   imageDragOver = false;
+  dropSuccess = false;
   saving = false;
 
   stats = {
@@ -72,6 +89,7 @@ export class AdminDashboardComponent {
     // Load dynamic data from backend (no mocks)
     this.loadProducts();
     this.loadDashboard();
+    this.loadEmployees();
   }
 
   openAddProduct() {
@@ -97,6 +115,10 @@ export class AdminDashboardComponent {
     };
     reader.readAsDataURL(file);
     this.imageDragOver = false;
+    // trigger drop success animation briefly
+    this.dropSuccess = true;
+    try { this.cdr.detectChanges(); } catch { }
+    setTimeout(() => { this.dropSuccess = false; try { this.cdr.detectChanges(); } catch {} }, 900);
   }
 
   onPriceFocus() {
@@ -179,6 +201,74 @@ export class AdminDashboardComponent {
       try { this.cdr.detectChanges(); } catch { }
     };
     reader.readAsDataURL(file);
+    // trigger drop success animation briefly
+    this.dropSuccess = true;
+    try { this.cdr.detectChanges(); } catch { }
+    setTimeout(() => { this.dropSuccess = false; try { this.cdr.detectChanges(); } catch {} }, 900);
+  }
+
+  /* Employees */
+  loadEmployees() {
+    this.api.get<any>('api/employees').subscribe({
+      next: (res: any) => {
+        const data = res?.data ?? res ?? [];
+        this.employees = Array.isArray(data) ? data : [];
+      },
+      error: (err: any) => {
+        this.employees = [];
+        console.debug('Failed to load employees from API:', err);
+      }
+    });
+  }
+
+  openAddEmployee() {
+    this.showAddEmployee = true;
+    (this.employeeForm as any).reset({ fullName: '', role: '', email: '', phone: '', password: '' });
+  }
+
+  closeAddEmployee() {
+    this.showAddEmployee = false;
+  }
+
+  addEmployee() {
+    if (this.employeeForm.invalid) {
+      this.employeeForm.markAllAsTouched();
+      this.showToastMessage('Completa todos los campos para registrar un empleado');
+      return;
+    }
+    const v = this.employeeForm.value as any;
+    const payload = {
+      name: v.fullName,
+      role: v.role,
+      email: v.email,
+      phone: v.phone,
+      password: v.password
+    };
+    this.saving = true;
+    this.api.post<any>('api/employees', payload).subscribe({
+      next: (res: any) => {
+        this.saving = false;
+        const created = res?.data ?? res;
+        const added = {
+          id: created?.id ?? `E${(this.employees.length + 1).toString().padStart(3,'0')}`,
+          fullName: created?.name ?? payload.name,
+          role: created?.role ?? payload.role,
+          email: created?.email ?? payload.email,
+          phone: created?.phone ?? payload.phone,
+          estado: created?.estado ?? 'Activo',
+          fechaIngreso: created?.fechaIngreso ?? new Date().toLocaleDateString()
+        };
+        this.employees = [added, ...this.employees];
+        this.closeAddEmployee();
+        this.showToastMessage('Empleado creado correctamente');
+      },
+      error: (err: any) => {
+        this.saving = false;
+        const msg = err?.error?.message || err?.message || `Conexión con el backend fallida (status ${err?.status ?? 'unknown'})`;
+        this.showToastMessage(msg);
+        console.debug('Create employee failed:', err);
+      }
+    });
   }
 
   addProduct() {
@@ -264,6 +354,14 @@ export class AdminDashboardComponent {
 
   setActiveSection(section: string) {
     this.activeSection = section;
+  }
+
+  toggleRoleDropdown() {
+    this.roleDropdownOpen = !this.roleDropdownOpen;
+  }
+
+  closeRoleDropdown() {
+    this.roleDropdownOpen = false;
   }
 
   logout() {
