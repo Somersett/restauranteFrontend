@@ -1,0 +1,130 @@
+/* Toast de error */
+.toast-error {
+  position: fixed;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff5555;
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  z-index: 20000;
+  animation: fadeIn 0.3s;
+}
+.page{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: radial-gradient(ellipse at top left, #071022 0%, #0f1724 60%);
+  padding:0; /* remove outer padding that produced visible white gutters */
+  margin:0;
+  width:100vw;
+}
+.card{
+  width:380px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:0; /* remove visible border */
+  padding:2rem;
+  border-radius:12px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+  color:#cfd8e3;
+}
+.brand{display:flex;align-items:center;gap:.5rem}
+.brand .icon{background:#ff7a00;color:#081021;padding:.4rem;border-radius:8px;font-size:1.2rem}
+.brand h1{margin:0;font-size:1.4rem}
+h2{margin-top:1rem;margin-bottom:.2rem;color:#fff}
+.subtitle{color:#98a4b8;margin-bottom:1rem}
+.field{display:flex;flex-direction:column;margin-bottom:.75rem}
+.field span{font-size:.8rem;color:#94a3b8;margin-bottom:.35rem}
+.field input{padding:.75rem;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(0,0,0,0.25);color:#fff}
+.actions{display:flex;justify-content:space-between;align-items:center;margin:.5rem 0}
+.actions .forgot{color:#ff9a2b;text-decoration:none;font-size:.85rem;cursor:pointer;transition:color 0.2s}
+.actions .forgot:hover{color:#ffb04d}
+button{width:100%;padding:.85rem;border-radius:10px;border:0;background:#ff7a00;color:#071021;font-weight:700;margin-top:.5rem;cursor:pointer;transition:all 0.2s}
+button:hover{background:#ff8c1a;transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,122,0,0.3)}
+button:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+button:disabled:hover{background:#ff7a00;box-shadow:none}
+.error{color:#ff6b6b;margin-top:.6rem}
+.footer{font-size:.75rem;color:#6b7380;margin-top:1rem;text-align:center}
+.bg{display:none}
+
+/* Modal de error */
+.modal-overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(0,0,0,0.75);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10000;
+  animation:fadeIn 0.2s ease-in;
+}
+
+.modal{
+  background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  padding:2rem;
+  max-width:400px;
+  width:90%;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  text-align:center;
+  animation:slideUp 0.3s ease-out;
+}
+
+.modal-icon{
+  font-size:3rem;
+  margin-bottom:1rem;
+}
+
+.modal h3{
+  color:#fff;
+  margin:0 0 0.5rem 0;
+  font-size:1.5rem;
+}
+
+.modal p{
+  color:#98a4b8;
+  margin:0 0 1.5rem 0;
+  line-height:1.5;
+}
+
+.modal-btn{
+  width:100%;
+  padding:0.85rem;
+  border-radius:10px;
+  border:0;
+  background:#ff7a00;
+  color:#071021;
+  font-weight:700;
+  cursor:pointer;
+  font-family:'Poppins', sans-serif;
+  transition:background 0.2s;
+}
+
+.modal-btn:hover{
+  background:#ff8c1a;
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+@keyframes slideUp{
+  from{transform:translateY(20px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+
+@media(min-width:900px){
+  .card{width:460px}
+}
+
+/* make inputs and text use Poppins for friendlier look */
+.card, .card input, .card button, .card .subtitle, .card label, .card h2, .card h1 { font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }

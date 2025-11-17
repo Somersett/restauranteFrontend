@@ -1,0 +1,45 @@
+<div class="page">
+  <div class="card">
+    <div class="brand">
+      <div class="icon">🍴</div>
+      <h1>Cypra</h1>
+    </div>
+
+    <h2>Iniciar Sesión</h2>
+    <p class="subtitle">Accede a tu panel de gestión.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label class="field">
+        <span>Correo Electrónico</span>
+        <input type="email" formControlName="email" placeholder="tu@email.com" />
+        <div *ngIf="form.get('email')!.touched && form.get('email')!.invalid" class="error">
+          <span *ngIf="form.get('email')!.errors?.['required']">El correo es obligatorio.</span>
+          <span *ngIf="form.get('email')!.errors?.['email']">Formato de correo inválido.</span>
+        </div>
+      </label>
+
+      <label class="field">
+        <span>Contraseña</span>
+        <input type="password" formControlName="password" placeholder="Ingresa tu contraseña" />
+        <div *ngIf="form.get('password')!.touched && form.get('password')!.invalid" class="error">
+          <span *ngIf="form.get('password')!.errors?.['required']">La contraseña es obligatoria.</span>
+        </div>
+      </label>
+
+      <div class="actions">
+        <label class="remember"><input type="checkbox" formControlName="remember" /> Recordarme</label>
+        <a class="forgot" href="#">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <button type="submit" [disabled]="loading()">{{ loading() ? 'Ingresando...' : 'Ingresar' }}</button>
+    </form>
+
+    <div class="footer">© 2024 Cypra. Todos los derechos reservados.</div>
+  </div>
+  <div class="bg"></div>
+</div>
+
+<!-- Toast de error -->
+<div *ngIf="showToast()" class="toast-error">
+  {{ toastMessage() }}
+</div>

@@ -1,1 +1,20 @@
+/* Global styles: load Poppins and remove default body margins so app background fills viewport */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background: #071022; /* dark base to avoid white gutters */
+	-webkit-font-smoothing:antialiased;
+	-moz-osx-font-smoothing:grayscale;
+	font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+/* Ensure app root takes full height */
+app-root, body > #root, body > app-root {
+	display:block;
+	min-height:100%;
+}
+
 /* You can add global styles to this file, and also import other style files */

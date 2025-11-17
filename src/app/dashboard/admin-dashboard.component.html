@@ -1,0 +1,312 @@
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon" aria-hidden="false" aria-label="Cypra logo">
+        <!-- Rounded green square with two white rounded bars -->
+        <svg viewBox="0 0 64 64" width="36" height="36" role="img" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="60" height="60" rx="10" ry="10" fill="#16a34a" />
+          <rect x="20" y="16" width="8" height="32" rx="4" ry="4" fill="#ffffff" opacity="0.95" />
+          <rect x="36" y="16" width="8" height="32" rx="4" ry="4" fill="#ffffff" opacity="0.95" />
+        </svg>
+      </div>
+      <div class="brand-info">
+        <h2>Cypra</h2>
+        <p>Restaurante</p>
+      </div>
+    </div>
+    <nav class="nav-menu">
+      <a [class.active]="activeSection === 'inicio'" (click)="setActiveSection('inicio')">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="#9fb9ff"/>
+          </svg>
+        </span>
+        <span>Inicio</span>
+      </a>
+      <a [class.active]="activeSection === 'productos'" (click)="setActiveSection('productos')">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M21 16V8l-9-5-9 5v8l9 5 9-5zM12 3.2L19.6 7 12 10.8 4.4 7 12 3.2z" fill="#c7ffdf"/>
+          </svg>
+        </span>
+        <span>Productos</span>
+      </a>
+      <a [class.active]="activeSection === 'empleados'" (click)="setActiveSection('empleados')">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V20h14v-3.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V20h6v-3.5C23 14.17 18.33 13 16 13z" fill="#bda6ff"/>
+          </svg>
+        </span>
+        <span>Empleados</span>
+      </a>
+      <a [class.active]="activeSection === 'ventas'" (click)="setActiveSection('ventas')">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M12 1L3 5v6c0 5 4 9 9 9s9-4 9-9V5l-9-4zM11 11v6h2v-6h-2z" fill="#ffd27a"/>
+          </svg>
+        </span>
+        <span>Ventas</span>
+      </a>
+      <a [class.active]="activeSection === 'mesas'" (click)="setActiveSection('mesas')">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M4 6h16v2H4V6zm0 4h16v6H4v-6zm2 8v-4h12v4h-2v-2H8v2H6z" fill="#ffdfd6"/>
+          </svg>
+        </span>
+        <span>Mesas</span>
+      </a>
+      <a [class.active]="activeSection === 'proveedores'" (click)="setActiveSection('proveedores')">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M3 13h12v-2H3v2zm0 4h2v-2H3v2zm16-8h-3V7h-2v2H8v8h11v-4zM18 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" fill="#ffd6c7"/>
+          </svg>
+        </span>
+        <span>Proveedores</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="config-btn" (click)="setActiveSection('config')">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.03 7.03 0 00-1.62-.94L14.5 2h-5l-.38 2.26c-.57.23-1.12.52-1.62.86L4.09 4.16a.5.5 0 00-.6.22L1.57 7.7a.5.5 0 00.12.64L3.72 9.9c-.04.31-.06.63-.06.94s.02.63.06.94L1.57 13.36a.5.5 0 00-.12.64l1.92 3.32c.14.24.44.34.68.22l2.39-.96c.5.34 1.05.63 1.62.86L9.5 22h5l.38-2.26c.57-.23 1.12-.52 1.62-.86l2.39.96c.24.12.54.02.68-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58z" fill="#cfe3ff"/>
+          </svg>
+        </span>
+        <span>Configuración</span>
+      </div>
+      <button class="logout-btn" (click)="logout()">
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="top-bar">
+      <h1>Bienvenido, Administrador</h1>
+    </header>
+
+    <!-- Global toast (top-right) to ensure visibility even if modal positioning interferes) -->
+    <div class="global-toast" *ngIf="showToast">{{ toastMessage }}</div>
+
+    <div class="content-area">
+      <!-- Productos view -->
+      <section *ngIf="activeSection === 'productos'" class="products-view">
+        <div class="products-header">
+          <div>
+            <h1>Gestión de Productos</h1>
+            <p class="subtitle">Añade, edita y gestiona los productos de tu restaurante.</p>
+          </div>
+          <div class="products-actions">
+            <button class="add-btn" (click)="openAddProduct()">
+              <span class="icon">
+                <svg viewBox="0 0 24 24"><path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6v-2z" fill="#fff"/></svg>
+              </span>
+              <span>Añadir Nuevo Producto</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="products-filters">
+          <input class="search" placeholder="Buscar producto por nombre..." [(ngModel)]="searchQuery" />
+          <select [(ngModel)]="selectedCategory">
+            <option>Todas las Categorías</option>
+            <option>Entradas</option>
+            <option>Platos Fuertes</option>
+            <option>Bebidas</option>
+            <option>Postres</option>
+          </select>
+        </div>
+
+        <div class="products-table">
+          <div class="table-head">
+            <div>PRODUCTO</div>
+            <div>CATEGORÍA</div>
+            <div>PRECIO</div>
+            <div>ESTADO</div>
+            <div>ACCIONES</div>
+          </div>
+          <div class="table-body">
+            <div class="table-row" *ngFor="let p of products | slice:0:100">
+              <div class="product-cell product-info">
+                <img [src]="p.image" alt="{{p.name}}" />
+                <div>
+                  <div class="product-name">{{ p.name }}</div>
+                  <div class="product-id">ID: {{ p.id }}</div>
+                </div>
+              </div>
+              <div class="product-cell">{{ p.category }}</div>
+              <div class="product-cell">${{ p.price.toFixed(2) }}</div>
+              <div class="product-cell"><span class="badge" [class.active]="p.estado === 'Activo'">{{ p.estado }}</span></div>
+              <div class="product-cell">
+                <button class="icon-btn">✏️</button>
+                <button class="icon-btn">🗑️</button>
+              </div>
+            </div>
+          </div>
+          <div class="table-footer">Mostrando 1-{{products.length}} de {{products.length}} productos</div>
+        </div>
+
+        <!-- Add Product Modal -->
+        <div class="modal-overlay" *ngIf="showAddProduct">
+          <div class="modal-card">
+            <h2>Añadir Nuevo Producto</h2>
+            <p class="subtitle">Completa la información para agregar un producto al menú.</p>
+            <form (ngSubmit)="addProduct()" [formGroup]="productForm">
+              <div class="form-grid">
+                <div class="form-col">
+                  <label>Nombre del Producto</label>
+                  <input formControlName="name" placeholder="Ej. Tacos al Pastor" [class.input-invalid]="productForm.get('name')?.invalid && (productForm.get('name')?.touched || productForm.get('name')?.dirty)" />
+                  <div class="field-error" *ngIf="productForm.get('name')?.invalid && (productForm.get('name')?.touched || productForm.touched)">El nombre es obligatorio.</div>
+
+                  <label>Descripción</label>
+                  <textarea formControlName="description" placeholder="Describe brevemente el producto..." [class.input-invalid]="productForm.get('description')?.invalid && (productForm.get('description')?.touched || productForm.get('description')?.dirty)"></textarea>
+                  <div class="field-error" *ngIf="productForm.get('description')?.invalid && (productForm.get('description')?.touched || productForm.touched)">La descripción es obligatoria.</div>
+
+                  <div class="form-row">
+                    <div class="field">
+                      <label>Precio</label>
+                      <input type="text" [value]="priceDisplay" (input)="onPriceInput($event)" (focus)="onPriceFocus()" (blur)="onPriceBlur()" placeholder="0" inputmode="numeric" pattern="[0-9]*" [class.input-invalid]="productForm.get('price')?.invalid && (productForm.get('price')?.touched || productForm.get('price')?.dirty)" />
+                      <div class="field-error" *ngIf="productForm.get('price')?.invalid && (productForm.get('price')?.touched || productForm.touched)">
+                        <span *ngIf="productForm.get('price')?.errors?.['required']">El precio es obligatorio.</span>
+                        <span *ngIf="productForm.get('price')?.errors?.['min']">El precio debe ser 0 o mayor.</span>
+                      </div>
+                    </div>
+
+                    <div class="field">
+                      <label>Categoría</label>
+                      <select formControlName="category" [class.input-invalid]="productForm.get('category')?.invalid && (productForm.get('category')?.touched || productForm.get('category')?.dirty)">
+                        <option>Entradas</option>
+                        <option>Platos Fuertes</option>
+                        <option>Bebidas</option>
+                        <option>Postres</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="field-row">
+                    <div class="field field--small">
+                      <label>Cantidad</label>
+                      <input formControlName="quantity" type="number" min="1" step="1" [class.input-invalid]="productForm.get('quantity')?.invalid && (productForm.get('quantity')?.touched || productForm.get('quantity')?.dirty)" />
+                      <div class="field-error" *ngIf="productForm.get('quantity')?.invalid && (productForm.get('quantity')?.touched || productForm.touched)">
+                        <span *ngIf="productForm.get('quantity')?.errors?.['required']">La cantidad es obligatoria.</span>
+                        <span *ngIf="productForm.get('quantity')?.errors?.['min']">La cantidad debe ser al menos 1.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-col image-col">
+                  <label>Imagen del Producto</label>
+                  <div class="image-uploader modern" [class.dragover]="imageDragOver">
+                    <input id="product-image" type="file" (change)="onFileChange($event)" accept="image/*" />
+                    <label for="product-image" class="image-drop modern-label"
+                      (dragover)="onImageDragOver($event)" (dragleave)="onImageDragLeave($event)" (drop)="onImageDrop($event)">
+                      <div *ngIf="imagePreview" class="image-preview modern-preview">
+                        <img [src]="imagePreview" alt="preview" />
+                      </div>
+                      <div *ngIf="!imagePreview" class="image-help modern-help">
+                        <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M4 7h3l2-3h6l2 3h3v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7z" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="12" cy="13" r="3" stroke="#fff" stroke-width="1.2" fill="none"/></svg>
+                        <p class="upload-cta">Arrastra o haz click para subir</p>
+                        <p class="upload-sub">PNG, JPG hasta 10MB</p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- quantity moved into above form-row for better alignment -->
+
+              <div class="modal-actions">
+                <button type="button" class="btn muted" (click)="closeAddProduct()">Cancelar</button>
+                <button type="submit" class="btn primary" [disabled]="productForm.invalid || saving">Guardar Producto</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Non-product dashboard content -->
+      <section *ngIf="activeSection !== 'productos'">
+        <p class="subtitle">Aquí tienes un resumen de la actividad de hoy.</p>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>Ingresos del Día</h3>
+            <p class="stat-value">${{ stats.ingresosDia.toFixed(2) }}</p>
+            <span class="stat-change positive">+5.2%</span>
+          </div>
+          <div class="stat-card">
+            <h3>Número de Órdenes</h3>
+            <p class="stat-value">{{ stats.numOrdenes }}</p>
+            <span class="stat-change positive">+10%</span>
+          </div>
+          <div class="stat-card">
+            <h3>Mesas Activas</h3>
+            <p class="stat-value">{{ stats.mesasActivas.actual }} / {{ stats.mesasActivas.total }}</p>
+            <span class="stat-change">80% ocupación</span>
+          </div>
+          <div class="stat-card warning">
+            <h3>Inventario Bajo</h3>
+            <p class="stat-value">{{ stats.inventarioBajo }} productos</p>
+            <span class="stat-change alert">Revisar stock</span>
+          </div>
+        </div>
+
+        <!-- Charts and Activity -->
+        <div class="dashboard-grid">
+          <!-- Sales Chart -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Ventas de la Última Semana</h3>
+              <div class="chart-info">
+                <span>Últimos 7 días</span>
+                <span class="trend-up">↗ +{{ ventasSemana.cambio }}%</span>
+              </div>
+            </div>
+            <div class="chart-total">
+              <span class="total-label">Total</span>
+              <span class="total-value">${{ ventasSemana.total.toFixed(2) }}</span>
+            </div>
+            <div class="chart-container">
+              <div class="chart-line">
+                <svg viewBox="0 0 700 200" preserveAspectRatio="none">
+                  <path d="M 0,120 Q 100,60 200,80 T 400,40 T 700,90" fill="none" stroke="#00ff88" stroke-width="3"/>
+                  <path d="M 0,120 Q 100,60 200,80 T 400,40 T 700,90 L 700,200 L 0,200 Z" fill="url(#gradient)"/>
+                  <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" style="stop-color:#00ff88;stop-opacity:0.3" />
+                      <stop offset="100%" style="stop-color:#00ff88;stop-opacity:0" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <div class="chart-labels">
+                <span *ngFor="let item of ventasSemana.datos">{{ item.dia }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="activity-card">
+            <h3>Actividad Reciente</h3>
+            <div class="activity-list">
+              <div class="activity-item" *ngFor="let item of actividadReciente">
+                <div class="activity-info">
+                  <p class="activity-text">{{ item.transaccion }}</p>
+                  <span class="activity-time">{{ item.hora }}</span>
+                </div>
+                <div class="activity-right">
+                  <span class="activity-amount" *ngIf="item.monto">${{ item.monto.toFixed(2) }}</span>
+                  <span class="activity-status" [class]="item.estado.toLowerCase()">{{ item.estado }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
