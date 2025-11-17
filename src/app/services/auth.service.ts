@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, switchMap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 
 function decodeJwt(token: string) {
@@ -49,17 +49,17 @@ export class AuthService {
   }
 
   login(credentials: { email: string; password: string }): Observable<any> {
-    return this.api.post<any>('api/login', credentials).pipe(
+    // Ensure the Laravel Sanctum CSRF cookie is set before attempting login.
+    // This hits `/sanctum/csrf-cookie` (relative path via ApiService) and waits for it,
+    // then performs the login POST. Use withCredentials via the credentials interceptor.
+    return this.api.get<any>('sanctum/csrf-cookie', { withCredentials: true }).pipe(
+      switchMap(() => this.api.post<any>('api/login', credentials, { withCredentials: true })),
       tap((res: any) => {
-        
         const token = res?.token ?? res?.access_token ?? null;
-        
         if (token) this.setToken(token);
-        // If the backend returns the user object in the login response, set it explicitly
         if (res?.user) {
           this._currentUser$.next(res.user);
         }
-        // If user not provided, try to fetch /me later (login caller will do this).
       })
     );
   }
